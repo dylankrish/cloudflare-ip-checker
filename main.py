@@ -33,12 +33,14 @@ def checkIPs(ipType):
                 # print that there is a difference
                 print('There is a difference in the Cloudflare ' + ipType + ' list.')
                 print('Added IPs: ' + ', '.join(diff))
+                # send a discord notification
+                sendDiscordNotification(', '.join(diff))
                 # add the difference to the file
                 with open('cloudflare-' + ipType + '.txt', 'a') as f:
                     f.write('\n'.join(diff))
 
 
-def sendDiscordWebhook(afterips):
+def sendDiscordNotification(newips):
     import datetime
     # timestamp
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
@@ -49,7 +51,7 @@ def sendDiscordWebhook(afterips):
     data["embeds"] = [
         {
             "title" : "**A Cloudflare IP change has been detected.**",
-            "description" : "**" + afterips + "**\n\n" + str(timestamp),
+            "description" : "**" + newips + "**\n\n" + str(timestamp),
             # orange cloudflare color
             "color" : 0xFFA500
         }
