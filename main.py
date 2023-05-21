@@ -3,6 +3,7 @@ import time
 import os
 checkIPv4 = True
 checkIPv6 = False
+discordWebhookURL = ''
 checkInterval = 60 # in seconds
 
 def checkIPs(ipType):
@@ -35,6 +36,25 @@ def checkIPs(ipType):
                 # add the difference to the file
                 with open('cloudflare-' + ipType + '.txt', 'a') as f:
                     f.write('\n'.join(diff))
+
+
+def sendDiscordWebhook(afterips):
+    import datetime
+    # timestamp
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
+    # send a discord notification
+    data = {
+        "username" : "Cloudflare IP Change Notifier",
+    }
+    data["embeds"] = [
+        {
+            "title" : "**A Cloudflare IP change has been detected.**",
+            "description" : "**" + afterips + "**\n\n" + str(timestamp),
+            # orange cloudflare color
+            "color" : 0xFFA500
+        }
+    ]
+    requests.post(discordWebhookURL, data=data)
 
 def main():
     while True:
