@@ -11,7 +11,7 @@ def checkIPs(ipType):
         # if the file does not exist, then run the code below
         # this is for first run
         if not os.path.exists('cloudflare-' + ipType + '.txt'):
-            response = requests.get('https://www.cloudflare.com/ips-' + ipType)
+            response = requests.get('https://www.cloudflare.com/' + ipType)
             response.raise_for_status()  # raise exception for non-2xx status codes
             ips = response.text.strip().split('\n')
             # write the data to the file
@@ -23,7 +23,7 @@ def checkIPs(ipType):
             with open('cloudflare-' + ipType + '.txt', 'r') as f:
                 beforeips = f.read().strip().split('\n')
             # get the data from the API
-            response = requests.get('https://www.cloudflare.com/ips-' + ipType)
+            response = requests.get('https://www.cloudflare.com/' + ipType)
             response.raise_for_status()
             afterips = response.text.strip().split('\n')
             # compare the data
