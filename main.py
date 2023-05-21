@@ -29,15 +29,13 @@ def checkIPs(ipType):
         if beforeips != afterips:
             # find the difference between the two lists
             diff = list(set(beforeips) - set(afterips))
-            # print that there is a difference
-            print('There is a difference in the Cloudflare ' + ipType + ' list.')
             # check to see if the difference is an addition or a removal
-            if len(diff) > 0:
-                print('IP change detected in the' + ipType + ' list:')
-                changedIPs = ', '.join(diff)
-                print(changedIPs)
-                # send a discord notification
-                sendDiscordNotification(changedIPs)
+            # print that there is a difference
+            print('IP change detected in the' + ipType + ' list:')
+            changedIPs = ', '.join(diff)
+            print(changedIPs)
+            # send a discord notification
+            sendDiscordNotification(changedIPs)
             # update the file with the new data
             with open('cloudflare-' + ipType + '.txt', 'w') as f:
                 f.write('\n'.join(afterips))
