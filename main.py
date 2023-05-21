@@ -66,3 +66,5 @@ def main():
             checkIPs('ips-v6')
         time.sleep(checkInterval)
     
+if __name__ == '__main__':
+    main()
