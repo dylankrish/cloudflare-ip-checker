@@ -1,2 +1,2 @@
 # cloudflare-ip-checker
-Application that notifies the user when there is a change in Cloudflare cloud IP addresses
+Python script that detects changes in Cloudflare's Proxy IP's and sends a notification through Discord when it detects them.
