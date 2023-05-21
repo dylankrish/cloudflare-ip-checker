@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  my-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cloudflare-ip-checker 
+    restart: unless-stopped
+    networks:
+      - podman
+
+networks:
+  podman:
+    external: true
