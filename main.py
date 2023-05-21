@@ -33,16 +33,11 @@ def checkIPs(ipType):
             print('There is a difference in the Cloudflare ' + ipType + ' list.')
             # check to see if the difference is an addition or a removal
             if len(diff) > 0:
-                print('The following IPs have been removed from the Cloudflare ' + ipType + ' list:')
-                print(', '.join(diff))
+                print('IP change detected in the' + ipType + ' list:')
+                changedIPs = ', '.join(diff)
+                print(changedIPs)
                 # send a discord notification
-                sendDiscordNotification(', '.join(diff), '-')
-            else:
-                diff = list(set(afterips) - set(beforeips))
-                print('The following IPs have been added to the Cloudflare ' + ipType + ' list:')
-                print(', '.join(diff))
-                # send a discord notification
-                sendDiscordNotification(', '.join(diff), '+')
+                sendDiscordNotification(changedIPs)
             # update the file with the new data
             with open('cloudflare-' + ipType + '.txt', 'w') as f:
                 f.write('\n'.join(afterips))
@@ -50,7 +45,7 @@ def checkIPs(ipType):
             print('No difference in the Cloudflare ' + ipType + ' list.')
 
 
-def sendDiscordNotification(newips, type):
+def sendDiscordNotification(ipchange):
     import datetime
     # timestamp
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
@@ -58,19 +53,15 @@ def sendDiscordNotification(newips, type):
     data = {
         "username" : "Cloudflare IP Change Notifier",
     }
-    if type == '-':
-        title = "**A Cloudflare IP removal has been detected.**"
-    elif type == '+':
-        title = "**A Cloudflare IP addition has been detected.**"
     data["embeds"] = [
         {
-            "title" : title,
-            "description" : "**" + newips + "**\n\n" + str(timestamp),
+            "title" : "**A Cloudflare IP change has been detected.**",
+            "description" : "**" + ipchange + "**\n\n" + str(timestamp),
             # orange cloudflare color
             "color" : 0xFFA500
         }
     ]
-    requests.post(discordWebhookURL, data=data)
+    print(requests.post(discordWebhookURL, json=data))
 
 def main():
     while True:
